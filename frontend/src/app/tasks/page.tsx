@@ -15,6 +15,7 @@ import { TaskDrawer } from "@/components/tasks/TaskDrawer";
 import { TaskFormModal } from "@/components/tasks/TaskFormModal";
 import { DeleteDialog } from "@/components/tasks/DeleteDialog";
 import { ToastStack, type ToastItem } from "@/components/ui/Toast";
+import { AssistantPanel } from "@/components/chat/AssistantPanel";
 
 type View = "all" | "mine";
 type FormModalState = { mode: "add" | "edit"; task?: Task } | null;
@@ -267,6 +268,7 @@ export default function TasksPage() {
       />
 
       <ToastStack toasts={toasts} />
+      <AssistantPanel />
     </div>
   );
 }

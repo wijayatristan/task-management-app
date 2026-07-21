@@ -1,4 +1,4 @@
-import type { Task, TaskCreateInput, TaskStatus, TaskUpdateInput, User } from "@/types";
+import type { ChatResponse, Task, TaskCreateInput, TaskStatus, TaskUpdateInput, User } from "@/types";
 import { clearSession, getToken } from "@/lib/auth";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
@@ -99,4 +99,8 @@ export function updateTaskStatus(taskId: number, status: TaskStatus) {
 
 export function deleteTask(taskId: number) {
   return request<void>(`/tasks/${taskId}`, { method: "DELETE" });
+}
+
+export function askAssistant(message: string) {
+  return request<ChatResponse>("/chat", { method: "POST", body: { message } });
 }

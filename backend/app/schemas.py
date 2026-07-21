@@ -63,3 +63,15 @@ class TaskOut(BaseModel):
     assignee: UserOut | None
     created_at: datetime
     updated_at: datetime
+
+
+# --- Chat ---
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=500)
+
+
+class ChatResponse(BaseModel):
+    answer: str
+    intent: str

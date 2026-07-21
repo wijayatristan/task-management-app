@@ -32,3 +32,8 @@ export interface TaskUpdateInput {
   status?: TaskStatus;
   assignee_id?: number;
 }
+
+export interface ChatResponse {
+  answer: string;
+  intent: string;
+}
