@@ -266,8 +266,6 @@ The backend uses the following variables:
 
 The default values in `.env.example` are configured for local development with Docker Compose.
 
-Do not commit the actual `.env` file.
-
 ### Frontend
 
 The frontend environment file is:
@@ -299,8 +297,6 @@ The frontend uses the following API URL:
 ```env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
 ```
-
-Do not place private API keys or backend secrets inside frontend environment variables.
 
 ## AI Task Assistant
 
@@ -346,8 +342,6 @@ The assistant supports questions such as:
    ```
 
 Refresh the frontend after the backend has restarted.
-
-Never commit a real Gemini API key to the repository.
 
 ## Database Commands
 
