@@ -79,6 +79,74 @@ task-management-app/
 
 The backend and frontend themselves always run locally with Python/Node — they are not containerized either way, only the database setup differs.
 
+## Getting Started From Scratch
+
+This section is a single, straight-through walkthrough for someone who has never touched this project before, from cloning the repository to having it open and working in the browser. It assumes nothing is set up yet. You will need two terminal windows/tabs open at the same time: one for the backend, one for the frontend.
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/tristantowijaya/task-management-app.git
+cd task-management-app
+```
+
+**2. Start PostgreSQL**
+
+Choose one:
+
+```bash
+# Option A — with Docker
+cd backend
+docker compose up -d
+cd ..
+```
+
+```bash
+# Option B — without Docker (see "Installation" below for the full per-OS commands)
+# install PostgreSQL, then create the taskapp role/database
+```
+
+**3. Set up and start the backend (first terminal)**
+
+```bash
+cd task-management-app/backend
+cp .env.example .env
+
+python3 -m venv .venv
+source .venv/bin/activate   # on Windows: .venv\Scripts\activate
+
+pip install -r requirements.txt
+alembic upgrade head
+python -m app.seed
+
+uvicorn app.main:app --reload
+```
+
+Leave this terminal running. The backend is now serving at `http://localhost:8000`.
+
+**4. Set up and start the frontend (second terminal)**
+
+```bash
+cd task-management-app/frontend
+cp .env.example .env.local
+
+npm install
+npm run dev
+```
+
+Leave this terminal running too. The frontend is now serving at `http://localhost:3000`.
+
+**5. Open the app**
+
+Go to `http://localhost:3000` in your browser and log in with:
+
+```
+Email:    demo@example.com
+Password: password123
+```
+
+You should land on the tasks board with 6 seeded users available as assignees and no tasks yet. The rest of this README explains each of these steps in more detail, and what to do if something doesn't work.
+
 ## Installation
 
 ### 1. Database (PostgreSQL)
