@@ -8,7 +8,7 @@ import { setSession } from "@/lib/auth";
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@taskapp.com");
+  const [email, setEmail] = useState("demo@example.com");
   const [password, setPassword] = useState("password123");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +60,7 @@ export function LoginForm() {
               autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@taskapp.com"
+              placeholder="you@example.com"
               className="h-[38px] w-full rounded-sm border border-line-strong bg-surface px-3 outline-none transition-colors hover:border-ink-faint focus:border-accent focus:ring-3 focus:ring-accent-soft"
             />
           </div>
@@ -98,7 +98,7 @@ export function LoginForm() {
           </span>
           <div>
             <span className="text-ink-muted">Email:</span>{" "}
-            <code className="rounded border border-line bg-surface px-1.5 py-0.5 font-mono">admin@taskapp.com</code>
+            <code className="rounded border border-line bg-surface px-1.5 py-0.5 font-mono">demo@example.com</code>
           </div>
           <div className="mt-1">
             <span className="text-ink-muted">Password:</span>{" "}
