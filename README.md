@@ -71,6 +71,7 @@ task-management-app/
 
 ## Prerequisites
 
+- Git, to clone this repository
 - PostgreSQL — either via Docker, or installed locally. Both are covered below, pick whichever you have available.
 - Docker (optional — only needed if you want to run PostgreSQL in a container instead of installing it locally)
 - Python 3.10 or later (backend)
@@ -164,7 +165,7 @@ This starts a PostgreSQL container with a persistent volume, matching the creden
 
 Install PostgreSQL locally and make sure it is running:
 
-- macOS (Homebrew): `brew install postgresql@16 && brew services start postgresql@16`
+- macOS (Homebrew): `brew install postgresql@16 && brew services start postgresql@16`. If Homebrew itself isn't installed, either install it first from [brew.sh](https://brew.sh), or download [Postgres.app](https://postgresapp.com) instead — it's a regular macOS app, no package manager or terminal setup required.
 - Linux (Debian/Ubuntu): `sudo apt install postgresql` (starts automatically as a service)
 - Windows: install PostgreSQL from [postgresql.org](https://www.postgresql.org/download/windows/) (runs automatically as a service after install)
 
