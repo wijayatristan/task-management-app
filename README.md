@@ -4,6 +4,24 @@ A full-stack task management application developed for a Front-End and Back-End 
 
 The application allows users to authenticate, manage tasks through a Kanban board, assign tasks to team members, and search or filter task data.
 
+## Screenshots
+
+**Kanban Board**
+
+![Kanban Board](docs/screenshots/kanban-board.png)
+
+**Login**
+
+![Login](docs/screenshots/login.png)
+
+**Task Detail Drawer**
+
+![Task Detail Drawer](docs/screenshots/task-detail.png)
+
+**AI Task Assistant**
+
+![AI Task Assistant](docs/screenshots/ai-assistant.png)
+
 ## Features
 
 - JWT authentication with a seeded demo account
