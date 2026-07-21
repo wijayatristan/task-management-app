@@ -1,332 +1,397 @@
 # Task Management App
 
-A simple task management application built for a Front-End & Back-End Developer Internship technical assessment. Users can log in, view tasks on a Kanban board, create and edit tasks, change task status, and assign tasks to team members. It also includes an optional read-only AI assistant that can answer questions about the task data.
+A full-stack task management application developed for a Front-End and Back-End Developer Internship technical assessment.
+
+The application allows users to authenticate, manage tasks through a Kanban board, assign tasks to team members, and search or filter task data.
 
 ## Features
 
-- JWT login with a seeded demo account (no registration)
-- Kanban board with three columns: Todo, In Progress, Done
-- Create, edit, and delete tasks
-- Change task status from a dropdown
-- Assign a task to a user, fetched from the backend
+- JWT authentication with a seeded demo account
+- Kanban board with Todo, In Progress, and Done columns
+- Create, view, update, and delete tasks
+- Change task status and assignee
 - Search tasks by title
 - Filter tasks by status, assignee, and deadline
-- "My Tasks" view showing only tasks assigned to the logged-in user
-- Task detail drawer with full task information
-- Optional AI Task Assistant that answers questions about task data (read-only)
+- My Tasks view for the authenticated user
+- Task detail drawer
+- Interactive FastAPI documentation
+- PostgreSQL migrations using Alembic
+- Reproducible database seed script
+- Optional read-only AI task assistant
 
 ## Tech Stack
 
 **Frontend**
-- Next.js (App Router)
+
+- Next.js
+- React
 - TypeScript
 - Tailwind CSS
-- lucide-react (icons)
 
 **Backend**
+
 - FastAPI
 - SQLAlchemy
-- Alembic (database migrations)
-- Pydantic / pydantic-settings
+- Alembic
+- Pydantic
+- JWT authentication
 
 **Database**
-- PostgreSQL (via Docker Compose)
 
-**Authentication**
-- JWT (python-jose)
-- Password hashing with passlib (bcrypt)
-
-**AI**
-- Google Gemini API, used only for classifying a question into a fixed set of intents. All actual data is still fetched by the backend through normal database queries. Optional and disabled by default.
+- PostgreSQL
+- Docker Compose
 
 ## Project Structure
 
-```
+```text
 task-management-app/
 ├── backend/
-│   ├── app/
-│   │   ├── routers/        # auth, users, tasks, chat
-│   │   ├── services/       # business logic per router
-│   │   ├── models.py       # SQLAlchemy models (User, Task)
-│   │   ├── schemas.py      # Pydantic request/response schemas
-│   │   ├── security.py     # password hashing, JWT
-│   │   ├── config.py       # environment-based settings
-│   │   ├── database.py     # SQLAlchemy engine/session
-│   │   ├── seed.py         # database seed script
-│   │   └── main.py         # FastAPI app entrypoint
-│   ├── alembic/             # database migrations
-│   ├── docker-compose.yml   # PostgreSQL container
-│   └── requirements.txt
 ├── frontend/
-│   └── src/
-│       ├── app/             # routes: /login, /tasks
-│       ├── components/      # auth, tasks, chat, layout, ui
-│       ├── lib/              # API client, auth helpers
-│       └── types/
 └── docs/
-    ├── postman/              # Postman collection
-    ├── erd/                  # ERD (DBML source + PNG export)
-    └── planning/
 ```
 
 ## Prerequisites
 
-- Git, to clone this repository
-- PostgreSQL — either via Docker, or installed locally. Both are covered below, pick whichever you have available.
-- Docker (optional — only needed if you want to run PostgreSQL in a container instead of installing it locally)
-- Python 3.10 or later (backend)
-- Node.js 20.9 or later (frontend, required by Next.js)
-- npm
+Make sure the following software is installed:
 
-The backend and frontend themselves always run locally with Python/Node — they are not containerized either way, only the database setup differs.
+- Git
+- Python 3.12
+- Node.js 20.9 or later
+- Docker Desktop
 
-## Getting Started From Scratch
+PostgreSQL does not need to be installed separately because it runs through Docker Compose.
 
-This section is a single, straight-through walkthrough for someone who has never touched this project before, from cloning the repository to having it open and working in the browser. It assumes nothing is set up yet. You will need two terminal windows/tabs open at the same time: one for the backend, one for the frontend.
+## Getting Started
 
-**1. Clone the repository**
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/tristantowijaya/task-management-app.git
+git clone https://github.com/wijayatristan/task-management-app.git
 cd task-management-app
 ```
 
-**2. Start PostgreSQL**
+### 2. Start PostgreSQL
 
-Choose one:
+Enter the backend directory, create the backend environment file, and start PostgreSQL.
+
+**macOS**
 
 ```bash
-# Option A — with Docker
 cd backend
-docker compose up -d
-cd ..
-```
-
-```bash
-# Option B — without Docker (see "Installation" below for the full per-OS commands)
-# install PostgreSQL, then create the taskapp role/database
-```
-
-**3. Set up and start the backend (first terminal)**
-
-```bash
-cd task-management-app/backend
 cp .env.example .env
-
-python3 -m venv .venv
-source .venv/bin/activate   # on Windows: .venv\Scripts\activate
-
-pip install -r requirements.txt
-alembic upgrade head
-python -m app.seed
-
-uvicorn app.main:app --reload
+docker compose up -d
 ```
 
-Leave this terminal running. The backend is now serving at `http://localhost:8000`.
+**Windows PowerShell**
 
-**4. Set up and start the frontend (second terminal)**
+```powershell
+Set-Location backend
+Copy-Item .env.example .env
+docker compose up -d
+```
+
+You can verify that the PostgreSQL container is running with:
 
 ```bash
-cd task-management-app/frontend
-cp .env.example .env.local
+docker compose ps
+```
 
+### 3. Run the Backend
+
+Run the following commands from the backend directory.
+
+**macOS**
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m alembic upgrade head
+python -m app.seed
+python -m uvicorn app.main:app --reload
+```
+
+**Windows PowerShell**
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m alembic upgrade head
+python -m app.seed
+python -m uvicorn app.main:app --reload
+```
+
+If PowerShell blocks virtual environment activation, run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Then activate the virtual environment again:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+The backend will run at:
+
+```text
+http://localhost:8000
+```
+
+Interactive API documentation is available at:
+
+```text
+http://localhost:8000/docs
+```
+
+Keep the backend terminal running.
+
+### 4. Run the Frontend
+
+Open a second terminal and navigate to the cloned repository.
+
+**macOS**
+
+```bash
+cd path/to/task-management-app/frontend
+cp .env.example .env.local
 npm install
 npm run dev
 ```
 
-Leave this terminal running too. The frontend is now serving at `http://localhost:3000`.
+**Windows PowerShell**
 
-**5. Open the app**
-
-Go to `http://localhost:3000` in your browser and log in with:
-
+```powershell
+Set-Location path\to\task-management-app\frontend
+Copy-Item .env.example .env.local
+npm install
+npm run dev
 ```
-Email:    demo@example.com
+
+Replace `path/to/task-management-app` with the actual location of the cloned repository.
+
+The frontend will run at:
+
+```text
+http://localhost:3000
+```
+
+## Demo Account
+
+Use the following seeded account to log in:
+
+```text
+Email: demo@example.com
 Password: password123
 ```
 
-You should land on the tasks board with 6 seeded users available as assignees and no tasks yet. The rest of this README explains each of these steps in more detail, and what to do if something doesn't work.
-
-## Installation
-
-### 1. Database (PostgreSQL)
-
-**Option A — with Docker**
-
-```bash
-cd backend
-docker compose up -d
-```
-
-This starts a PostgreSQL container with a persistent volume, matching the credentials already set in `.env.example` (user `taskapp`, database `taskapp`, port `5432`).
-
-**Option B — without Docker**
-
-Install PostgreSQL locally and make sure it is running:
-
-- macOS (Homebrew): `brew install postgresql@16 && brew services start postgresql@16`. If Homebrew itself isn't installed, either install it first from [brew.sh](https://brew.sh), or download [Postgres.app](https://postgresapp.com) instead — it's a regular macOS app, no package manager or terminal setup required.
-- Linux (Debian/Ubuntu): `sudo apt install postgresql` (starts automatically as a service)
-- Windows: install PostgreSQL from [postgresql.org](https://www.postgresql.org/download/windows/) (runs automatically as a service after install)
-
-Then create a role and database matching `backend/.env.example` so the backend can connect without any further changes. The default superuser differs by platform, so use whichever applies:
-
-```bash
-# macOS (Homebrew) — the default superuser is your OS username, there is no "postgres" role
-psql -d postgres -c "CREATE ROLE taskapp LOGIN PASSWORD 'taskapp';"
-createdb -O taskapp taskapp
-
-# Linux (apt) / Windows — default superuser is "postgres"
-psql -U postgres -c "CREATE ROLE taskapp LOGIN PASSWORD 'taskapp';"
-createdb -U postgres -O taskapp taskapp
-```
-
-If you already have PostgreSQL running with different credentials, that's fine too — just update `DATABASE_URL` in `backend/.env` (see below) to match your own user, password, and database name instead of creating a new role.
-
-Both options end up with the same result: a PostgreSQL server reachable at the connection string in `DATABASE_URL`. Everything from this point on (migrations, seeding, running the backend) is identical either way.
-
-### 2. Backend (FastAPI)
-
-```bash
-cd backend
-cp .env.example .env
-
-python3 -m venv .venv
-source .venv/bin/activate   # on Windows: .venv\Scripts\activate
-
-pip install -r requirements.txt
-```
-
-### 3. Frontend (Next.js)
-
-```bash
-cd frontend
-cp .env.example .env.local
-
-npm install
-```
+The seed script also creates additional users that can be selected as task assignees.
 
 ## Environment Variables
 
-### backend/.env.example
+The project includes environment variable templates for both the backend and frontend.
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string. Default matches the Docker Compose service. |
-| `SECRET_KEY` | Secret used to sign JWTs. Change this to any random string. |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | JWT expiry time in minutes. |
-| `CORS_ORIGINS` | Allowed frontend origin(s) for CORS. |
-| `ENABLE_AI_CHATBOT` | `true`/`false`. Turns the AI Task Assistant on or off. Defaults to `false`. |
-| `GEMINI_API_KEY` | Google Gemini API key. Only required if `ENABLE_AI_CHATBOT=true`. Leave empty otherwise. |
+### Backend
 
-### frontend/.env.example
+The backend environment file is:
 
-| Variable | Description |
-|---|---|
-| `NEXT_PUBLIC_API_BASE_URL` | Base URL of the backend API, including the `/api/v1` prefix. |
+```text
+backend/.env
+```
 
-No secrets are committed anywhere in this repository — `.env` files are git-ignored, only the `.env.example` templates are tracked.
+It is created from:
 
-## Database Setup
+```text
+backend/.env.example
+```
 
-With the PostgreSQL container running and the backend virtual environment active:
+**macOS**
 
 ```bash
-cd backend
-source .venv/bin/activate
-
-alembic upgrade head
-python -m app.seed
+cp .env.example .env
 ```
 
-- `alembic upgrade head` creates the `users` and `tasks` tables.
-- `python -m app.seed` clears the database and inserts the seed users listed below. It resets the ID sequences too, so on a fresh database the first user gets ID 1 and the first task created afterward gets ID 1. It is safe to run more than once — it always produces the same clean result, and the `tasks` table is always empty right after seeding.
+**Windows PowerShell**
 
-## Running the Application
+```powershell
+Copy-Item .env.example .env
+```
 
-**Backend**
+The backend uses the following variables:
+
+- `DATABASE_URL`: PostgreSQL connection string
+- `SECRET_KEY`: secret used to sign JWT tokens
+- `ACCESS_TOKEN_EXPIRE_MINUTES`: access-token lifetime
+- `CORS_ORIGINS`: frontend origins allowed to access the backend
+- `ENABLE_AI_CHATBOT`: enables or disables the AI assistant
+- `GEMINI_API_KEY`: Gemini API key used when the AI assistant is enabled
+
+The default values in `.env.example` are configured for local development with Docker Compose.
+
+Do not commit the actual `.env` file.
+
+### Frontend
+
+The frontend environment file is:
+
+```text
+frontend/.env.local
+```
+
+It is created from:
+
+```text
+frontend/.env.example
+```
+
+**macOS**
 
 ```bash
-cd backend
-source .venv/bin/activate
-uvicorn app.main:app --reload
+cp .env.example .env.local
 ```
 
-Runs at `http://localhost:8000`. Interactive API docs are available at `http://localhost:8000/docs`.
+**Windows PowerShell**
 
-**Frontend**
-
-```bash
-cd frontend
-npm run dev
+```powershell
+Copy-Item .env.example .env.local
 ```
 
-Runs at `http://localhost:3000`.
+The frontend uses the following API URL:
 
-## Demo Credentials
-
-```
-Email:    demo@example.com
-Password: password123
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
 ```
 
-This account is created by the seed script along with five other users (Tristanto Wijaya, Calvin Setiawan, Wellson Charlest, Chelsea Willis, Olivia Joanna) who are available in the assignee dropdown. Only the demo account is needed to log in — there is no registration flow.
-
-## API Documentation
-
-The complete API documentation, including example requests and responses for every endpoint, is available as a Postman collection:
-
-```
-docs/postman/task-management.postman_collection.json
-```
-
-Recommended order to try it:
-
-1. Import the collection into Postman.
-2. Run **Login**.
-3. The JWT is stored automatically in a collection variable and reused by the following requests.
-4. Run **Get Users**.
-5. Run **Create Task**.
-6. Run **Get Task by ID**.
-7. Run **Update Task**.
-8. Run **Update Task Status**.
-9. Run **Delete Task**.
-10. Try **Ask Task Assistant** (returns a normal answer if the AI assistant is enabled, or a clear "disabled" message if it is not).
-
-The collection already includes example success and error responses for each request, so it can be reviewed without running the server.
-
-## Database Design
-
-The ERD is available under `docs/erd/` as a DBML source file (`schema.dbml`) and a rendered image (`task-management-app-erd.png`).
-
-The schema has two tables: `users` and `tasks`. Each task optionally belongs to one user through `tasks.assignee_id`, and a user can be the assignee of many tasks.
+Do not place private API keys or backend secrets inside frontend environment variables.
 
 ## AI Task Assistant
 
-The AI Task Assistant is an optional, read-only feature. It answers a fixed set of questions about the current task data:
+The AI Task Assistant is optional, read-only, and disabled by default.
+
+Gemini is used only to classify questions into predefined intents. Database access is handled through predefined backend queries. The AI cannot generate or execute SQL.
+
+The assistant supports questions such as:
 
 - List incomplete tasks
 - Count completed tasks
 - List tasks due today
 - Get the assignee of a specific task
 
-Gemini is only used to classify the question into one of these categories (or "unsupported" if it doesn't match). It never queries the database and never generates SQL — the backend runs a normal, predefined database query for whichever category was matched, and returns the answer.
+### Enable the AI Assistant
 
-To enable it, set in `backend/.env`:
+1. Open the following file:
 
+   ```text
+   backend/.env
+   ```
+
+2. Set the following variables:
+
+   ```env
+   ENABLE_AI_CHATBOT=true
+   GEMINI_API_KEY=your-gemini-api-key
+   ```
+
+   Replace `your-gemini-api-key` with a valid Gemini API key.
+
+3. Save the file.
+4. Stop the running backend with:
+
+   ```text
+   Control + C
+   ```
+
+5. Restart the backend from the backend directory with the virtual environment active:
+
+   ```bash
+   python -m uvicorn app.main:app --reload
+   ```
+
+Refresh the frontend after the backend has restarted.
+
+Never commit a real Gemini API key to the repository.
+
+## Database Commands
+
+Run these commands from the backend directory with the Python virtual environment active.
+
+**Apply Database Migrations**
+
+```bash
+python -m alembic upgrade head
 ```
-ENABLE_AI_CHATBOT=true
-GEMINI_API_KEY=your-key-here
+
+**Reset Seed Data**
+
+```bash
+python -m app.seed
 ```
 
-If `ENABLE_AI_CHATBOT` is `false` or no API key is set, the rest of the application works normally — the assistant endpoint just responds with a message saying it is disabled.
+The seed command resets the application data and deletes existing tasks.
+
+**Check the PostgreSQL Container**
+
+```bash
+docker compose ps
+```
+
+**Stop PostgreSQL While Preserving Data**
+
+```bash
+docker compose down
+```
+
+**Remove PostgreSQL and Stored Database Data**
+
+```bash
+docker compose down -v
+```
+
+Running `docker compose down -v` permanently deletes the PostgreSQL Docker volume.
+
+To rebuild the database afterward:
+
+```bash
+docker compose up -d
+python -m alembic upgrade head
+python -m app.seed
+```
+
+## API Documentation
+
+FastAPI automatically provides interactive API documentation.
+
+Swagger UI:
+
+```text
+http://localhost:8000/docs
+```
+
+OpenAPI JSON:
+
+```text
+http://localhost:8000/openapi.json
+```
+
+A Postman collection is also available at:
+
+```text
+docs/postman/
+```
+
+## Additional Documentation
+
+- Postman collection: `docs/postman/`
+- Database design: `docs/erd/`
+- Planning documentation: `docs/planning/`
 
 ## Notes
 
-- The seed script always resets the database to the same state: 6 users, 0 tasks. Re-running it does not create duplicates.
-- The AI Task Assistant is fully optional. The core application (auth, tasks, users) does not depend on it in any way.
-- There is no user registration — only the seeded demo account and the other seeded users exist.
-
-## License
-
-This repository was built for a technical assessment and is not intended for production use.
+- The project does not include user registration.
+- Only the seeded demo account is intended for login.
+- The AI assistant is optional and disabled by default.
+- The seed script deletes existing task data whenever it is run.
+- Environment files are ignored by Git and must be created from the provided templates.
+- The application is intended for local development and technical-assessment purposes.
