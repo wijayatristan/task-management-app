@@ -96,6 +96,24 @@ You can verify that the PostgreSQL container is running with:
 docker compose ps
 ```
 
+### Using an Existing PostgreSQL Installation
+
+Docker is not required when PostgreSQL is already installed locally.
+
+1. Create a PostgreSQL database.
+2. Update `DATABASE_URL` in `backend/.env`.
+
+Example:
+
+```env
+DATABASE_URL=postgresql://postgres:password@localhost:5432/task_management
+```
+
+```bash
+python -m alembic upgrade head
+python -m app.seed
+```
+
 ### 3. Run the Backend
 
 Run the following commands from the backend directory.
